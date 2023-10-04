@@ -13,6 +13,11 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
     <ProjectGuid>{0322B2EF-7452-479D-BAE2-FCAB75033337}</ProjectGuid>
+    <AppName>Resonite</AppName>
+	  <ModLoaderShort>rml</ModLoaderShort>
+    <AppPath>$(MSBuildThisFileDirectory)$(AppName)</AppPath>
+    <AppPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\')">C:\Program Files (x86)\Steam\steamapps\common\$(AppName)\</AppPath>
+    <AppPath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/$(AppName)/')">$(HOME)/.steam/steam/steamapps/common/$(AppName)/</AppPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,19 +37,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>J:\SteamLibrary\steamapps\common\NeosVR\nml_libs\0Harmony.dll</HintPath>
+    <Reference Include="HarmonyLib">
+      <HintPath>$(AppPath)$(ModLoaderShort)_libs\0Harmony.dll</HintPath>
+      <HintPath Condition="Exists('$(AppPath)0Harmony.dll')">$(AppPath)0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="BaseX">
-      <HintPath>J:\SteamLibrary\steamapps\common\NeosVR\Neos_Data\Managed\BaseX.dll</HintPath>
+    <Reference Include="$(AppName)ModLoader">
+      <HintPath>$(AppPath)$(AppName)ModLoader.dll</HintPath>
+      <HintPath>$(AppPath)Libraries\$(AppName)ModLoader.dll</HintPath>
     </Reference>
     <Reference Include="FrooxEngine">
-      <HintPath>J:\SteamLibrary\steamapps\common\NeosVR\Neos_Data\Managed\FrooxEngine.dll</HintPath>
+      <HintPath>$(AppPath)$(AppName)_Data\Managed\FrooxEngine.dll</HintPath>
     </Reference>
-    <Reference Include="NeosModLoader">
-      <HintPath>J:\SteamLibrary\steamapps\common\NeosVR\Libraries\NeosModLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SpeedyURLs.cs" />
@@ -54,7 +57,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)\$(TargetFileName)" "J:\SteamLibrary\steamapps\common\NeosVR\nml_mods\"</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(CopyToMods)'=='true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppPath)$(ModLoaderShort)_mods" />
+    <Message Text="Copied $(TargetFileName) to $(AppPath)" Importance="high" />
+  </Target>
 </Project>

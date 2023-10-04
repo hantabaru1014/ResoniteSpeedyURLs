@@ -1,17 +1,16 @@
 ﻿using HarmonyLib;
-using NeosModLoader;
+using ResoniteModLoader;
 using FrooxEngine;
 using System;
-using BaseX;
 using FrooxEngine.UIX;
 
 namespace SpeedyURLNamespace
 {
-    public class SpeedyURLs : NeosMod
+    public class SpeedyURLs : ResoniteMod
     {
         public override string Name => "SpeedyURLs";
         public override string Author => "dfgHiatus";
-        public override string Version => "1.1.0";
+        public override string Version => "2.0.0";
         public override string Link => "https://github.com/dfgHiatus/SpeedyURLs/";
         public override void OnEngineInit()
         {
